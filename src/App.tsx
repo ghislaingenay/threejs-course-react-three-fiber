@@ -2,6 +2,7 @@ import Experience from "@components/experience";
 import "./App.css";
 import { Canvas, type CameraProps } from "@react-three/fiber";
 import THREE from "@definitions/three";
+import Drei from "@components/drei";
 
 function App() {
   const cameraSettings = {
@@ -20,7 +21,7 @@ function App() {
       }}
       camera={cameraSettings}
     >
-      <Experience />
+      <Drei />
     </Canvas>
   );
 }
