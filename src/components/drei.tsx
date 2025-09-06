@@ -15,7 +15,12 @@ export default function Drei() {
   const cube = useRef<THREE.Object3D | THREE.Mesh>(null!);
   const sphere = useRef<THREE.Object3D | THREE.Mesh>(null!);
 
-  const { position } = useControls({ position: -2 });
+  const { positionY } = useControls("positionY", {
+    value: 2,
+    min: -5,
+    max: 5,
+    step: 0.01,
+  });
 
   return (
     <>
@@ -29,7 +34,7 @@ export default function Drei() {
         lineWidth={2}
         axisColors={["#9381ff", "#ff4d6d", "#7ae582"]}
       >
-        <mesh position-x={position} ref={sphere}>
+        <mesh ref={sphere} position-y={positionY}>
           <sphereGeometry />
           <meshStandardMaterial color="orange" />
           <Html
