@@ -3,6 +3,7 @@ import "./App.css";
 import { Canvas, type CameraProps } from "@react-three/fiber";
 import THREE from "@definitions/three";
 import EnvStaging from "@components/env_staging";
+import LoadModels from "@components/load_models";
 
 function App() {
   const cameraSettings = {
@@ -32,7 +33,7 @@ function App() {
     >
       {/* Attach to a parent to a property */}
       <color attach="background" args={[new THREE.Color("#171717")]} />
-      <EnvStaging />
+      <LoadModels />
     </Canvas>
   );
 }

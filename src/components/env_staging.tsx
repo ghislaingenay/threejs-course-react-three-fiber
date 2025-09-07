@@ -6,99 +6,162 @@ import {
   // BakeShadows,
   SoftShadows,
   Environment,
+  Stage,
+  useHelper,
   // RandomizedLight,
   // Sky,
 } from "@react-three/drei";
+import { useControls } from "leva";
 // import { useControls } from "leva";
 import { Perf } from "r3f-perf";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import { useFrame, useThree } from "@react-three/fiber";
 
 export default function EnvStaging() {
-  const cube = useRef<THREE.Object3D | THREE.Mesh>(null!);
-  // const directionalLightRef = useRef<THREE.DirectionalLight>(null!);
+  const directionalLight = useRef();
+  useHelper(directionalLight, THREE.DirectionalLightHelper, 1);
 
-  // const { sunPosition } = useControls("sky", {
-  //   sunPosition: { value: [1, 2, 3] },
-  // });
+  const { color, opacity, blur } = useControls("contact shadows", {
+    color: "#1d8f75",
+    opacity: { value: 0.4, min: 0, max: 1 },
+    blur: { value: 2.8, min: 0, max: 10 },
+  });
 
-  // useHelper is a hook that adds a helper to the scene
-  // useHelper(ref, helperType, size)
-  // useHelper(directionalLightRef, THREE.DirectionalLightHelper, 1.0);
+  const { sunPosition } = useControls("sky", {
+    sunPosition: { value: [1, 2, 3] },
+  });
 
-  // if our sceene is static, we can use BakeShadows from drei to avoid rerender it
+  const { envMapIntensity, envMapHeight, envMapRadius, envMapScale } =
+    useControls("environment map", {
+      envMapIntensity: { value: 7, min: 0, max: 12 },
+      envMapHeight: { value: 7, min: 0, max: 100 },
+      envMapRadius: { value: 28, min: 10, max: 1000 },
+      envMapScale: { value: 100, min: 10, max: 1000 },
+    });
+
+  // const scene = useThree(state => state.scene)
+  // useEffect(() =>
+  // {
+  //     scene.environmentIntensity = envMapIntensity
+  // }, [ envMapIntensity ])
+
+  const cube = useRef<THREE.Mesh>(null!);
+
+  useFrame((state, delta) => {
+    // const time = state.clock.elapsedTime
+    // cube.current.position.x = 2 + Math.sin(time)
+    cube.current.rotation.y += delta * 0.2;
+  });
+
   return (
     <>
-      {/* BakeShadows is used to bake shadows into the scene */}
-      {/* It will create a shadow map that can be used to render shadows */}
-      {/* It is useful for static scenes where the lights and objects don't move */}
-      {/* It will improve performance by avoiding the need to recalculate shadows every frame */}
-      {/* It will also improve the quality of the shadows by using a higher resolution shadow map */}
-      {/* <BakeShadows /> */}
+      <color args={["ivory"]} attach="background" />
 
-      {/* SoftShadows is used to create soft shadows */}
-      {/*  size: radius of the softness
-      samples: quality (more samples = less visual noise but worse performance)
-      focus: distance where the shadow is the sharpest */}
-      <SoftShadows size={25} samples={10} focus={0} />
-      {/* Perf is a performance monitor for react-three-fiber */}
       <Perf position="top-left" />
-      <OrbitControls />
 
-      <Environment files={[]} />
+      <OrbitControls makeDefault />
 
-      {/* <directionalLight
-        ref={directionalLightRef}
-        position={sunPosition}
-        intensity={4.5}
-        castShadow
-        shadow-mapSize={[1024, 1024]}
-        shadow-camera-near={1}
-        shadow-camera-far={10}
-        shadow-camera-top={5}
-        shadow-camera-right={5}
-        shadow-camera-bottom={-5}
-        shadow-camera-left={-5}
-      /> */}
-      {/* <ambientLight castShadow intensity={1.5} /> */}
+      {/* <BakeShadows /> */}
+      {/* <SoftShadows size={ 25 } samples={ 10 } focus={ 0 } /> */}
 
-      {/* <Sky sunPosition={sunPosition} /> */}
+      {/* <Environment
+            background
+            // files={ [
+            //     './environmentMaps/2/px.jpg',
+            //     './environmentMaps/2/nx.jpg',
+            //     './environmentMaps/2/py.jpg',
+            //     './environmentMaps/2/ny.jpg',
+            //     './environmentMaps/2/pz.jpg',
+            //     './environmentMaps/2/nz.jpg',
+            // ] }
+            // files="./environmentMaps/the_sky_is_on_fire_2k.hdr"
+            preset="sunset"
+            resolution={ 32 }
+            ground={ {
+                height: envMapHeight,
+                radius: envMapRadius,
+                scale: envMapScale
+            } }
+        >
+        </Environment> */}
 
       {/* <AccumulativeShadows
-        temporal
-        frames={1000}
-        position-y={-0.99}
-        scale={10}
-        opacity={1}
+            position={ [ 0, - 0.99, 0 ] }
+            scale={ 10 }
+            color="#316d39"
+            opacity={ 0.8 }
+            frames={ Infinity }
+            temporal
+            blend={ 100 }
+        >
+            <RandomizedLight
+                amount={ 8 }
+                radius={ 1 }
+                ambient={ 0.5 }
+                intensity={ 3 }
+                position={ [ 1, 2, 3 ] }
+                bias={ 0.001 }
+            />
+        </AccumulativeShadows> */}
+
+      {/* <Sky sunPosition={ sunPosition } /> */}
+
+      {/* <directionalLight
+            ref={ directionalLight }
+            position={ sunPosition }
+            intensity={ 4.5 }
+            castShadow
+            shadow-mapSize={ [ 1024, 1024 ] }
+            shadow-camera-near={ 1 }
+            shadow-camera-far={ 10 }
+            shadow-camera-top={ 5 }
+            shadow-camera-right={ 5 }
+            shadow-camera-bottom={ - 5 }
+            shadow-camera-left={ - 5 }
+        /> */}
+      {/* <ambientLight intensity={ 1.5 } /> */}
+
+      {/* <mesh castShadow position-y={ 1 } position-x={ - 2 }>
+            <sphereGeometry />
+            <meshStandardMaterial color="orange" envMapIntensity={ envMapIntensity } />
+        </mesh> */}
+
+      {/* <mesh castShadow position-y={ 1 } ref={ cube } position-x={ 2 } scale={ 1.5 }>
+            <boxGeometry />
+            <meshStandardMaterial color="mediumpurple" envMapIntensity={ envMapIntensity } />
+        </mesh> */}
+
+      {/* <mesh receiveShadow position-y={ 0 } rotation-x={ - Math.PI * 0.5 } scale={ 10 }>
+            <planeGeometry />
+            <meshStandardMaterial color="greenyellow" envMapIntensity={ envMapIntensity } />
+        </mesh> */}
+
+      {/* <ContactShadows
+            position={ [ 0, 0, 0 ] }
+            scale={ 10 }
+            resolution={ 512 }
+            far={ 5 }
+            color={ color }
+            opacity={ opacity }
+            blur={ blur }
+        /> */}
+
+      <Stage
+        shadows={{ type: "contact", opacity: 0.2, blur: 3 }}
+        environment="sunset"
+        preset="portrait"
+        intensity={envMapIntensity}
       >
-        <RandomizedLight
-          amount={8}
-          radius={1}
-          ambient={0.5}
-          intensity={3}
-          position={[1, 2, 3]}
-          bias={0.001}
-        />
-      </AccumulativeShadows> */}
+        <mesh position-y={1} position-x={-2}>
+          <sphereGeometry />
+          <meshStandardMaterial color="orange" />
+        </mesh>
 
-      <mesh castShadow position-x={-2}>
-        <sphereGeometry />
-        <meshStandardMaterial color="orange" />
-      </mesh>
-
-      <mesh castShadow ref={cube} position-x={2} scale={1.5}>
-        <boxGeometry />
-        <meshStandardMaterial color="mediumpurple" />
-      </mesh>
-
-      <mesh
-        receiveShadow
-        position-y={-1}
-        rotation-x={-Math.PI * 0.5}
-        scale={10}
-      >
-        <planeGeometry />
-        <meshStandardMaterial color="greenyellow" />
-      </mesh>
+        <mesh ref={cube} position-y={1} position-x={2} scale={1.5}>
+          <boxGeometry />
+          <meshStandardMaterial color="mediumpurple" />
+        </mesh>
+      </Stage>
     </>
   );
 }
