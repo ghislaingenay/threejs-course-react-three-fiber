@@ -6,26 +6,48 @@ import {
   Float,
   Text,
   MeshReflectorMaterial,
+  useHelper,
 } from "@react-three/drei";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import THREE from "@definitions/three";
-import { useControls } from "leva";
+import { useControls, button } from "leva";
+import { Perf } from "r3f-perf";
 
 export default function Drei() {
   const cube = useRef<THREE.Object3D | THREE.Mesh>(null!);
   const sphere = useRef<THREE.Object3D | THREE.Mesh>(null!);
 
-  const { positionY } = useControls("positionY", {
-    value: 2,
-    min: -5,
-    max: 5,
-    step: 0.01,
+  const {
+    position: pos,
+    color,
+    visible,
+    perfVisible,
+  } = useControls({
+    color: "#ff0000",
+    // can set an interval which is like a range but with two cursors
+    myInterval: {
+      min: 0,
+      max: 10,
+      value: [4, 5],
+    },
+    position: {
+      value: { x: -2, y: 0 },
+      step: 0.01,
+      joystick: "invertY",
+    },
+    clickMe: button(() => {
+      console.log("ok");
+    }),
+    visible: true,
+    perfVisible: true,
   });
 
   return (
     <>
+      {perfVisible && <Perf position="top-left" />}
       <OrbitControls makeDefault enableDamping={false} />
       <directionalLight position={[1, 2, 3]} intensity={4.5} />
+
       <ambientLight intensity={1.5} />
 
       <PivotControls
@@ -34,9 +56,13 @@ export default function Drei() {
         lineWidth={2}
         axisColors={["#9381ff", "#ff4d6d", "#7ae582"]}
       >
-        <mesh ref={sphere} position-y={positionY}>
+        <mesh
+          visible={visible}
+          ref={sphere}
+          position={pos && [pos.x, pos.y, 0]}
+        >
           <sphereGeometry />
-          <meshStandardMaterial color="orange" />
+          <meshStandardMaterial color={color} />
           <Html
             center
             wrapperClass="label"

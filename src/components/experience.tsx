@@ -2,9 +2,8 @@
 import THREE from "@definitions/three";
 import {
   extend,
-  ReactThreeFiber,
   useFrame,
-  useThree,
+  // useThree,
 } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";

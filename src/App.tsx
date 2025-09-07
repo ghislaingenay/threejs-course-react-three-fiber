@@ -2,7 +2,7 @@
 import "./App.css";
 import { Canvas, type CameraProps } from "@react-three/fiber";
 import THREE from "@definitions/three";
-import Drei from "@components/drei";
+import EnvStaging from "@components/env_staging";
 
 function App() {
   const cameraSettings = {
@@ -19,9 +19,19 @@ function App() {
         toneMapping: THREE.ACESFilmicToneMapping,
         outputColorSpace: THREE.SRGBColorSpace,
       }}
+      // Update backgrund color
+      // 1.Update html backgroud-color in CSS
+      // 2. Update the rendered => chck App.tsx
+      // onCreated={(state) => {
+      //   state.gl.setClearColor("#171717", 1);
+      //   // or
+      //   state.scene.background = new THREE.Color("#171717");
+      // }}
       camera={cameraSettings}
     >
-      <Drei />
+      {/* Attach to a parent to a property */}
+      <color attach="background" args={[new THREE.Color("#171717")]} />
+      <EnvStaging />
     </Canvas>
   );
 }
