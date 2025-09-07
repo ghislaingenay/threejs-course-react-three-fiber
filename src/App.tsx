@@ -13,6 +13,7 @@ function App() {
   } satisfies CameraProps;
   return (
     <Canvas
+      shadows // enable shadows in renderer
       dpr={[1, 2]} // set pixel ratio
       gl={{
         antialias: true,
