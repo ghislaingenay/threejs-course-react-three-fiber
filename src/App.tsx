@@ -2,8 +2,7 @@
 import "./App.css";
 import { Canvas, type CameraProps } from "@react-three/fiber";
 import THREE from "@definitions/three";
-import EnvStaging from "@components/env_staging";
-import LoadModels from "@components/load_models";
+import PortalExperience from "@components/portal";
 
 function App() {
   const cameraSettings = {
@@ -14,6 +13,7 @@ function App() {
   } satisfies CameraProps;
   return (
     <Canvas
+      flat // disable dpr and antialias
       shadows // enable shadows in renderer
       dpr={[1, 2]} // set pixel ratio
       gl={{
@@ -33,7 +33,7 @@ function App() {
     >
       {/* Attach to a parent to a property */}
       <color attach="background" args={[new THREE.Color("#171717")]} />
-      <LoadModels />
+      <PortalExperience />
     </Canvas>
   );
 }
