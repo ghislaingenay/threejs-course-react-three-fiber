@@ -2,8 +2,7 @@
 import "./App.css";
 import { Canvas, type CameraProps } from "@react-three/fiber";
 import THREE from "@definitions/three";
-import MouseEvents from "@components/mouse_events";
-import PostProcessing from "@components/post_processing";
+import FunPortfolio from "@components/fun_portfolio";
 
 function App() {
   const cameraSettings = {
@@ -14,6 +13,7 @@ function App() {
   } satisfies CameraProps;
   return (
     <Canvas
+      className="r3f"
       flat // disable dpr and antialias
       shadows // enable shadows in renderer
       dpr={[1, 2]} // set pixel ratio
@@ -34,7 +34,7 @@ function App() {
     >
       {/* Attach to a parent to a property */}
       {/* <color attach="background" args={[new THREE.Color("#171717")]} /> */}
-      <PostProcessing />
+      <FunPortfolio />
     </Canvas>
   );
 }

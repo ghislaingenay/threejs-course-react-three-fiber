@@ -20,3 +20,11 @@ body,
   border-radius: 30px;
   user-select: none;
 }
+
+canvas {
+  touch-action: none;
+}
+
+.r3f {
+  touch-action: none;
+}
