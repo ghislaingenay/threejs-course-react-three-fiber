@@ -33,7 +33,7 @@ function App() {
       camera={cameraSettings}
     >
       {/* Attach to a parent to a property */}
-      <color attach="background" args={[new THREE.Color("#171717")]} />
+      {/* <color attach="background" args={[new THREE.Color("#171717")]} /> */}
       <PostProcessing />
     </Canvas>
   );
