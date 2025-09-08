@@ -2,7 +2,7 @@
 import "./App.css";
 import { Canvas, type CameraProps } from "@react-three/fiber";
 import THREE from "@definitions/three";
-import PortalExperience from "@components/portal";
+import MouseEvents from "@components/mouse_events";
 
 function App() {
   const cameraSettings = {
@@ -33,7 +33,7 @@ function App() {
     >
       {/* Attach to a parent to a property */}
       <color attach="background" args={[new THREE.Color("#171717")]} />
-      <PortalExperience />
+      <MouseEvents />
     </Canvas>
   );
 }
