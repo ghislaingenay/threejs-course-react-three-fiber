@@ -3,6 +3,7 @@ import "./App.css";
 import { Canvas, type CameraProps } from "@react-three/fiber";
 import THREE from "@definitions/three";
 import FunPortfolio from "@components/fun_portfolio";
+import PhysicsExperience from "@components/physics";
 
 function App() {
   const cameraSettings = {
@@ -34,7 +35,7 @@ function App() {
     >
       {/* Attach to a parent to a property */}
       {/* <color attach="background" args={[new THREE.Color("#171717")]} /> */}
-      <FunPortfolio />
+      <PhysicsExperience />
     </Canvas>
   );
 }
