@@ -1,32 +1,19 @@
 import { OrbitControls } from "@react-three/drei";
-import Lights from "./Lights";
+import Lights from "./lights";
+import Level from "./level";
+import { Physics } from "@react-three/rapier";
+import Player from "./player";
 
 export default function FunGameExperience() {
   return (
     <>
-      <OrbitControls makeDefault />
+      {/* <OrbitControls makeDefault /> */}
 
-      <Lights />
-
-      <mesh castShadow position-x={-2}>
-        <sphereGeometry />
-        <meshStandardMaterial color="orange" />
-      </mesh>
-
-      <mesh castShadow position-x={2} scale={1.5}>
-        <boxGeometry />
-        <meshStandardMaterial color="mediumpurple" />
-      </mesh>
-
-      <mesh
-        receiveShadow
-        position-y={-1}
-        rotation-x={-Math.PI * 0.5}
-        scale={10}
-      >
-        <planeGeometry />
-        <meshStandardMaterial color="greenyellow" />
-      </mesh>
+      <Physics>
+        <Lights />
+        <Level />
+        <Player />
+      </Physics>
     </>
   );
 }
