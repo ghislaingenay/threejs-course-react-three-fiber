@@ -7,7 +7,7 @@ import {
   RigidBody,
 } from "@react-three/rapier";
 import { useMemo, useRef, useState, type JSX } from "react";
-
+import useGame from "src/stores/use_game";
 type BlockProps = {
   position?: JSX.IntrinsicElements["mesh"]["position"];
 };
@@ -244,7 +244,8 @@ function Bounds({ length = 1 }: { length: number }) {
 }
 
 export default function Level() {
-  const count = 5;
+  const count = useGame((state) => state.blocksCount);
+
   const types = [BlockSpinner, BlockAxe, BlockLimbo];
 
   const memoBlocks = useMemo(() => {

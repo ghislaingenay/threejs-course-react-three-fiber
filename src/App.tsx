@@ -4,6 +4,7 @@ import { Canvas, type CameraProps } from "@react-three/fiber";
 import THREE from "@definitions/three";
 import FunGameExperience from "@components/fun_game";
 import { KeyboardControls } from "@react-three/drei";
+import Interface from "@components/fun_game/interface";
 
 function App() {
   const cameraSettings = {
@@ -46,6 +47,7 @@ function App() {
         {/* <color attach="background" args={[new THREE.Color("#171717")]} /> */}
         <FunGameExperience />
       </Canvas>
+      <Interface />
     </KeyboardControls>
   );
 }

@@ -3,11 +3,17 @@ import { useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { RapierRigidBody, RigidBody } from "@react-three/rapier";
 import { useEffect, useRef, useState } from "react";
+import useGame from "@/stores/use_game";
 
 export default function Player() {
   const body = useRef<RapierRigidBody>(null!);
   // const { rapier, world } = useRapier();
   const [subscribeKeys, getKeys] = useKeyboardControls();
+
+  const startGame = useGame((state) => state.start);
+  const endGame = useGame((state) => state.end);
+  const blocksCount = useGame((state) => state.blocksCount);
+  const restart = useGame((state) => state.restart);
 
   const [smoothedCameraPosition] = useState(
     () => new THREE.Vector3(10, 10, 10)
@@ -39,14 +45,19 @@ export default function Player() {
         if (value) jump();
       }
     );
+
+    const unsubscribeAny = subscribeKeys(() => {
+      startGame();
+    });
     return () => {
       unsubscribeJump();
+      unsubscribeAny();
     };
   }, [subscribeKeys]);
   useFrame((state, delta) => {
     if (!body.current) return;
     const { forward, backward, leftward, rightward } = getKeys();
-    const impulse = { x: 0.001, y: 0, z: 0 };
+    const impulse = { x: 0, y: 0, z: 0 };
     const torque = { x: 0, y: 0, z: 0 };
 
     const impulseStrength = 0.6 * delta;
@@ -93,7 +104,32 @@ export default function Player() {
 
     state.camera.position.copy(cameraPosition);
     state.camera.lookAt(cameraTarget);
+
+    if (bodyPosition.z < -(blocksCount * 4 + 2)) endGame();
+
+    if (bodyPosition.y < -4) restart();
   });
+
+  const reset = () => {
+    if (!body.current) return;
+    body.current.setTranslation({ x: 0, y: 1, z: 0 }, true); //put it back at the origin
+    body.current.setLinvel({ x: 0, y: 0, z: 0 }, true); // remove any translation force
+    body.current.setAngvel({ x: 0, y: 0, z: 0 }, true); // remove any angular force
+  };
+
+  useEffect(() => {
+    const unsubscribeReset = useGame.subscribe(
+      (state) => state.phase,
+      (value) => {
+        if (value === "ready") reset();
+      }
+    );
+
+    return () => {
+      unsubscribeReset();
+      // ...
+    };
+  }, []);
   return (
     <RigidBody
       ref={body}
