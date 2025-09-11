@@ -9,11 +9,13 @@ export type GameState = {
   end: () => void;
   startTime: number;
   endTime: number;
+  seed: number;
 };
 
 export default create<GameState>()(
   subscribeWithSelector((set) => ({
-    blocksCount: 3,
+    blocksCount: 10,
+    seed: 0, // Math.random() --- IGNORE ---
 
     /**
      * Time

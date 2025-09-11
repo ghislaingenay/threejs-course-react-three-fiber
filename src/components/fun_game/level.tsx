@@ -1,5 +1,5 @@
 import THREE from "@definitions/three";
-import { useGLTF } from "@react-three/drei";
+import { useGLTF, Text } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import {
   CuboidCollider,
@@ -206,6 +206,14 @@ function BlockEnd({ position = [0, 0, 0] }: BlockStartProps) {
       >
         <primitive object={hamburger.scene} scale={0.2} />
       </RigidBody>
+      <Text
+        font="/fonts/bebas-neue-v9-latin-regular.woff"
+        scale={8}
+        position={[0, 2.25, 2]}
+      >
+        FINISH
+        <meshBasicMaterial toneMapped={false} />
+      </Text>
     </group>
   );
 }
@@ -245,6 +253,7 @@ function Bounds({ length = 1 }: { length: number }) {
 
 export default function Level() {
   const count = useGame((state) => state.blocksCount);
+  const seed = useGame((state) => state.seed);
 
   const types = [BlockSpinner, BlockAxe, BlockLimbo];
 
@@ -257,7 +266,7 @@ export default function Level() {
     }
 
     return blocks;
-  }, [count, types]);
+  }, [count, types, seed]);
   return (
     <>
       <BlockStart position={[0, 0, 0]} />
